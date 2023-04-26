@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:researcher/Animation/animation_main.dart';
-import 'package:researcher/PasswordGenerator/password_generator.dart';
-import 'package:researcher/rz/Pagination/UI/list_view.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:researcher/Animation/rocket.dart';
+import 'package:researcher/Animation/spinner_animation.dart';
 
-import 'Animation/spinner_animation.dart';
-
-class OptionsPage extends StatelessWidget {
-  const OptionsPage({super.key});
+class AnimationMainScreen extends StatelessWidget {
+  const AnimationMainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +24,11 @@ class OptionsPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const PaginationView(),
+                        builder: (context) => const SpinnerAnimation(),
                       ),
                     );
                   },
-                  child: const Text('Pagination'),
+                  child: const Text('Spinner'),
                 ),
               ),
               const SizedBox(
@@ -42,29 +41,15 @@ class OptionsPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => PasswordGenerator(),
+                        builder: (context) => const RocketAnimation(),
                       ),
                     );
                   },
-                  child: const Text('Password Generator'),
+                  child: const Text('Rocket'),
                 ),
               ),
               const SizedBox(
                 height: 50,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * .05,
-                width: MediaQuery.of(context).size.width * .9,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const AnimationMainScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text('Animation'),
-                ),
               ),
             ],
           ),

@@ -39,6 +39,9 @@ class _PaginationViewState extends State<PaginationView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Pagination"),
+        ),
         body: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -60,7 +63,7 @@ class _PaginationViewState extends State<PaginationView> {
                 _refreshController.loadComplete();
                 return Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 500,
                     ),
                     Expanded(
