@@ -1,10 +1,23 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:researcher/options.dart';
+import 'package:researcher/rz/Pagination/Api/api_functions.dart';
+import 'package:researcher/rz/Pagination/Bloc/bloc/pagination_bloc_bloc.dart';
 
 void main() {
-  runApp(const MyApp());
+  ApiS apiS = ApiS();
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => PaginationBloc(apiS),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,21 +30,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const OptionsPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class PasswordGenerator extends StatefulWidget {
+  const PasswordGenerator({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<PasswordGenerator> createState() => _PasswordGeneratorState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _PasswordGeneratorState extends State<PasswordGenerator> {
   void _incrementCounter() {
     setState(() {});
   }
