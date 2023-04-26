@@ -57,6 +57,7 @@ class _PaginationViewState extends State<PaginationView> {
               if (state is DataLoaded) {
                 salesPageResponse =
                     BlocProvider.of<PaginationBloc>(context).salesPageResponse;
+                _refreshController.loadComplete();
                 return Column(
                   children: [
                     SizedBox(
@@ -67,6 +68,7 @@ class _PaginationViewState extends State<PaginationView> {
                         enablePullDown: false,
                         enablePullUp: true,
                         onLoading: () {
+                          _refreshController.requestLoading();
                           print("sfjkjs");
                           setState(() {
                             pageNo = pageNo++;
