@@ -1,7 +1,8 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:researcher/rz/Pagination/Api/Model/pagination_model.dart';
 import 'package:researcher/rz/Pagination/Api/api_functions.dart';

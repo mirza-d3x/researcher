@@ -13,37 +13,23 @@ class TopUpApiClient {
       required Object? body}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    // print(prefs.getString('token'));
-    print("Invoke Api worked");
-    print(method);
-
     Map<String, String> headerParams = {};
     if (method == 'POST' ||
         method == 'GET' ||
         method == 'PATCH' ||
-        method == "DELETE") {
+        method == "DELETE" ||
+        method == "DELETE_") {
       final token = prefs.getString('token');
-      print("Methode POST OR GET");
       headerParams = {
         "authorization": "Bearer $token",
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       };
-    } else if (method == "DELETE_") {
-      final token = prefs.getString('token');
-      print("method Delete_");
-      headerParams = {
-        "authorization": "Bearer $token",
-      };
     }
     Response response;
 
     String url = basePath + path;
-    // String searchurl =  basePath + 'search/movie'+'?api_key=$token'+ path;
-    print('========================================' + url);
 
-    // print(searchurl);
-    final nullableHeaderParams = (headerParams.isEmpty) ? null : headerParams;
 
     switch (method) {
       case "POST":
@@ -90,20 +76,15 @@ class TopUpApiClient {
     }
     log("**************${response.body}");
 
-    print('status of $path =>' + (response.statusCode).toString());
-    print(response.body);
+    log('status of $path =>${response.statusCode}');
+    log(response.body);
     if (response.statusCode >= 400) {
       // print("if)()");
-      log(path +
-          ' : ' +
-          response.statusCode.toString() +
-          ' : ' +
-          response.body);
+      log('$path : ${response.statusCode} : ${response.body}');
 
       throw ApiException(
           message: _decodeBodyBytes(response), statusCode: response.statusCode);
     }
-    ;
     return response;
   }
 

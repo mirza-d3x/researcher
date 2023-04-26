@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
-import 'package:researcher/rz/Pagination/Api/Model/TopUpLoginModelClass.dart';
+import 'package:researcher/rz/Pagination/Api/Model/topuploginmodelclass.dart';
 import 'package:researcher/rz/Pagination/Api/Model/pagination_model.dart';
 import 'package:researcher/rz/Pagination/Api/api_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,12 +16,13 @@ class ApiS {
       "password": "123456",
     };
 
-    print("getlogin....");
+    if (kDebugMode) {
+      print("getlogin....");
+    }
     Response response = await topUpApiClient.invokeAPI(
         path: "users/login", method: "LOGIN", body: body);
     log("_________________loginBody $body");
     prefs.setString('token', response.body);
-    print("response worked");
     return TopUpLoginModelClass.fromJson(json.decode(response.body));
   }
 

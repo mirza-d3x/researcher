@@ -1,9 +1,10 @@
-class ApiException implements Exception{
-  final statusCode;
-  final message;
-  ApiException({this.statusCode,this.message});
+class ApiException implements Exception {
+  final int statusCode;
+  final String message;
+  ApiException({required this.statusCode, required this.message});
 
-  String toString(){
+  @override
+  String toString() {
     return statusCode.toString();
   }
 }

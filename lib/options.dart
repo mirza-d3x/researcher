@@ -3,7 +3,6 @@ import 'package:researcher/Animation/animation_main.dart';
 import 'package:researcher/PasswordGenerator/password_generator.dart';
 import 'package:researcher/rz/Pagination/UI/list_view.dart';
 
-import 'Animation/spinner_animation.dart';
 
 class OptionsPage extends StatelessWidget {
   const OptionsPage({super.key});
@@ -42,7 +41,7 @@ class OptionsPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => PasswordGenerator(),
+                        builder: (context) => const PasswordGenerator(),
                       ),
                     );
                   },
