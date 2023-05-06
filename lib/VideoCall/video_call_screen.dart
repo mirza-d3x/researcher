@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 const String appId = "c6d57be0ce654e3e9735442565fad0e5";
@@ -14,7 +18,7 @@ class VideoCallingScreen extends StatefulWidget {
 class _VideoCallingScreenState extends State<VideoCallingScreen> {
   String channelName = "agora";
   String token =
-      "007eJxTYAjSu3vz0dEXLm6/P58ULxPLO/t2W23tXfkdPN6ZS7Pqzz9VYEg2SzE1T0o1SE41MzVJNU61NDc2NTExMjUzTUtMMUg1DQoMSmkIZGTIPOfKyMgAgSA+K0Nien5RIgMDAD8nIdA=";
+      "1:c6d57be0ce654e3e9735442565fad0e5:1683368018:c9c2a4a8424d60864e629119311d21b2d0a21126cc937b894b44db950642a306:0:agora:";
   int uid = 0;
 
   int? _remoteUid;
@@ -80,6 +84,31 @@ class _VideoCallingScreenState extends State<VideoCallingScreen> {
     );
   }
 
+  String generateToken(String appId, String appCertificate, String channelName,
+      int uid, int expirationTimeInSeconds) {
+    int timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    int expirationTimestamp = timestamp + expirationTimeInSeconds;
+
+    String rawTokenString =
+        appId + channelName + uid.toString() + expirationTimestamp.toString();
+
+    List<int> encodedAppCertificate = utf8.encode(appCertificate);
+    List<int> encodedTokenString = utf8.encode(rawTokenString);
+
+    List<int> buffer = List<int>.filled(
+        encodedTokenString.length + encodedAppCertificate.length, 0);
+    buffer.setRange(0, encodedTokenString.length, encodedTokenString);
+    buffer.setRange(
+        encodedTokenString.length, buffer.length, encodedAppCertificate);
+
+    Digest digest = sha256.convert(buffer);
+    String hexDigest = digest.toString();
+
+    String token =
+        "1:${appId}:${expirationTimestamp}:${hexDigest}:${uid}:${channelName}:";
+    return token;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,9 +157,35 @@ class _VideoCallingScreenState extends State<VideoCallingScreen> {
                   child: const Text("Leave"),
                 ),
               ),
-              // Text(agoraEngine.getCallId().toString())
             ],
           ),
+          Row(
+            children: [
+              SizedBox(
+                width: 300,
+                height: 20,
+                child: Text(
+                  generateToken(appId, "87fdb0b082144320a2ed379e399b16a7",
+                      channelName, uid, 100000),
+                ),
+              ),
+              IconButton(
+                onPressed: () async {
+                  await Clipboard.setData(
+                    ClipboardData(
+                      text: generateToken(
+                          appId,
+                          "87fdb0b082144320a2ed379e399b16a7",
+                          channelName,
+                          uid,
+                          100000),
+                    ),
+                  );
+                },
+                icon: Icon(Icons.copy),
+              ),
+            ],
+          )
         ],
       ),
     );
