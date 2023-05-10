@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
@@ -84,31 +83,6 @@ class _VideoCallingScreenState extends State<VideoCallingScreen> {
     );
   }
 
-  String generateToken(String appId, String appCertificate, String channelName,
-      int uid, int expirationTimeInSeconds) {
-    int timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    int expirationTimestamp = timestamp + expirationTimeInSeconds;
-
-    String rawTokenString =
-        appId + channelName + uid.toString() + expirationTimestamp.toString();
-
-    List<int> encodedAppCertificate = utf8.encode(appCertificate);
-    List<int> encodedTokenString = utf8.encode(rawTokenString);
-
-    List<int> buffer = List<int>.filled(
-        encodedTokenString.length + encodedAppCertificate.length, 0);
-    buffer.setRange(0, encodedTokenString.length, encodedTokenString);
-    buffer.setRange(
-        encodedTokenString.length, buffer.length, encodedAppCertificate);
-
-    Digest digest = sha256.convert(buffer);
-    String hexDigest = digest.toString();
-
-    String token =
-        "1:${appId}:${expirationTimestamp}:${hexDigest}:${uid}:${channelName}:";
-    return token;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,33 +133,32 @@ class _VideoCallingScreenState extends State<VideoCallingScreen> {
               ),
             ],
           ),
-          Row(
-            children: [
-              SizedBox(
-                width: 300,
-                height: 20,
-                child: Text(
-                  generateToken(appId, "87fdb0b082144320a2ed379e399b16a7",
-                      channelName, uid, 100000),
-                ),
-              ),
-              IconButton(
-                onPressed: () async {
-                  await Clipboard.setData(
-                    ClipboardData(
-                      text: generateToken(
-                          appId,
-                          "87fdb0b082144320a2ed379e399b16a7",
-                          channelName,
-                          uid,
-                          100000),
-                    ),
-                  );
-                },
-                icon: Icon(Icons.copy),
-              ),
-            ],
-          )
+          // Row(
+          //   children: [
+          //     SizedBox(
+          //       width: 300,
+          //       height: 20,
+          //       child: Text(
+                 
+          //       ),
+          //     ),
+          //     IconButton(
+          //       onPressed: () async {
+          //         await Clipboard.setData(
+          //           ClipboardData(
+          //             text: generateToken(
+          //                 appId,
+          //                 "87fdb0b082144320a2ed379e399b16a7",
+          //                 channelName,
+          //                 uid,
+          //                 100000),
+          //           ),
+          //         );
+          //       },
+          //       icon: Icon(Icons.copy),
+          //     ),
+          //   ],
+          // )
         ],
       ),
     );
@@ -250,3 +223,8 @@ class _VideoCallingScreenState extends State<VideoCallingScreen> {
     agoraEngine.leaveChannel();
   }
 }
+
+// generateToken() async {
+//   final _engine =
+//       await RtcEngine.createWithConfig(RtcEngineConfig('<YOUR APP ID>'));
+// }
