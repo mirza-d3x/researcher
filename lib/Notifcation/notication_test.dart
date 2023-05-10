@@ -65,6 +65,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ElevatedButton(
               onPressed: () {
                 notifications.showNotification(
+                    channelId: "ahgjdjf",
                     title: "Test notification",
                     body: "test notification testing ",
                     sound: 'noti');
@@ -73,11 +74,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                // notifications.showNotification(
-                //   title: "Test notification",
-                //   body: "test notification testing ",
-                //   payload: "",
-                // );
                 audioPlayers.play(AssetSource("sounds/notif.mp3"));
               },
               child: const Text("Alert Sound"),

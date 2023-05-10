@@ -8,14 +8,10 @@
 //
 
 import 'dart:developer';
-
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Notifications {
-  late final FirebaseMessaging _messaging;
-
   final FlutterLocalNotificationsPlugin notifications =
       FlutterLocalNotificationsPlugin();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
@@ -31,12 +27,13 @@ class Notifications {
         log('Got a message whilst in the foreground!');
         log('Message data: ${message.notification!.title}');
         if (message.notification != null) {
-          print(
-              "=====================Sound========================${message.data['sound']}");
+          log("=====================Sound========================${message.data['sound']}");
+          log(message.data.toString());
           showNotification(
               title: message.notification!.title!,
               body: message.notification!.body!,
-              sound: message.data['sound']);
+              sound: message.data['sound'],
+              channelId: message.data['channelId']);
           log('Message also contained a notification: ${message.notification!.title}');
         }
       });
@@ -53,67 +50,17 @@ class Notifications {
   }
 
   Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    log("000000000000000000000000000000000000000000000000000000000000000000000000000000");
     log('Handling a background message ${message.notification!.title}');
-    print(
-        "=====================Sound========================${message.data['sound']}");
-    showNotification(
-        title: message.notification!.title!,
-        body: message.notification!.body!,
-        sound: message.data['sound']);
+    log("=====================Sound========================${message.data['sound']}");
+    log(message.data.toString());
+    return showNotification(
+      title: message.notification!.title!,
+      body: message.notification!.body!,
+      sound: message.data['sound'],
+      channelId: message.data['channelId'],
+    );
   }
-
-  // void registerNotification() async {
-  //   await Firebase.initializeApp();
-
-  //   _messaging = FirebaseMessaging.instance;
-
-  //   NotificationSettings settings = await _messaging.requestPermission(
-  //     alert: true,
-  //     badge: true,
-  //     provisional: false,
-  //     sound: true,
-  //   );
-
-  //   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-  //     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-  //       log('Got a message whilst in the foreground!');
-  //       log('Message data: ${message.data}');
-
-  //       if (message.notification != null) {
-  //         log("NotificationRecieved");
-  //         showNotification(
-  //           title: message.notification!.title!,
-  //           body: message.notification!.body!,
-  //         );
-  //         log(
-  //             'Message also contained a notification: ${message.notification}');
-  //       }
-  //     });
-
-  //     // FirebaseMessaging.onBackgroundMessage(
-  //     //     _firebaseMessagingBackgroundHandler);
-
-  //     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-  //       log('A new onMessageOpenedApp event was published!');
-  //       log('Message data: ${message.data}');
-  //       showNotification(
-  //         title: message.notification!.title!,
-  //         body: message.notification!.body!,
-  //       );
-  //     });
-  //   } else {
-  //     log('User declined permission');
-  //   }
-  // }
-
-  // Future<void> _firebaseMessagingBackgroundHandler(
-  //     RemoteMessage message) async {
-  //   showNotification(
-  //     title: message.notification!.title!,
-  //     body: message.notification!.body!,
-  //   );
-  //   log('Handling a background message ${message.messageId}');
-  // }
 
   initNotification() async {
     const androidSettings = AndroidInitializationSettings('mipmap/ic_launcher');
@@ -128,17 +75,19 @@ class Notifications {
     required String title,
     required String body,
     required String sound,
+    required String channelId,
   }) async {
-    print("=====================Sound========================$sound");
-    notifications.show(id, title, body, await getNotificationDetails(sound));
+    await notifications.show(
+        id, title, body, getNotificationDetails(sound, channelId));
   }
 
-  getNotificationDetails(String sound) async {
+  getNotificationDetails(String sound, String channelId) {
     return NotificationDetails(
       android: AndroidNotificationDetails(
-        "channelIdfsgfgs",
+        channelId,
         "channelName",
         importance: Importance.max,
+        priority: Priority.max,
         playSound: true,
         sound: RawResourceAndroidNotificationSound(sound),
       ),
@@ -153,47 +102,4 @@ class PushNotification {
   });
   String? title;
   String? body;
-}
-
-// Initialize the FirebaseMessaging instance
-final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-
-// Request permission for receiving push notifications (optional)
-void requestPermissionForPushNotifications() async {
-  NotificationSettings settings = await _firebaseMessaging.requestPermission(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
-  log('User granted permission: ${settings.authorizationStatus}');
-}
-
-// Get the device token for push notifications (required for sending notifications)
-void getDeviceTokenForPushNotifications() async {
-  String? token = await _firebaseMessaging.getToken();
-  log('Device token for push notifications: $token');
-}
-
-// Listen for incoming push notifications while the app is in the foreground (optional)
-void handleIncomingForegroundNotifications() {
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    log('Received a foreground message: ${message.notification!.title}');
-  });
-}
-
-// Listen for incoming push notifications while the app is in the background (optional)
-void handleIncomingBackgroundNotifications() {
-  FirebaseMessaging.onBackgroundMessage((message) {
-    log('Received a background message: ${message.notification!.title}');
-    return Future<void>.value();
-  });
-}
-
-// Listen for incoming push notifications while the app is terminated (optional)
-void handleIncomingTerminatedNotifications() async {
-  RemoteMessage? initialMessage =
-      await FirebaseMessaging.instance.getInitialMessage();
-  if (initialMessage != null) {
-    log('Received a terminated message: ${initialMessage.notification!.title}');
-  }
 }
