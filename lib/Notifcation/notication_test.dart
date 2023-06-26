@@ -42,7 +42,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   Notifications notifications = Notifications();
-  AudioPlayer audioPlayers = AudioPlayer();
+ final AudioPlayer audioPlayers = AudioPlayer();
   @override
   void initState() {
     notifications.initNotification();
@@ -74,6 +74,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
             ElevatedButton(
               onPressed: () {
+
                 audioPlayers.play(AssetSource("sounds/notif.mp3"));
               },
               child: const Text("Alert Sound"),

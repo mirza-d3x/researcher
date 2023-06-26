@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:researcher/Animation/animation_main.dart';
 import 'package:researcher/Notifcation/notication_test.dart';
 import 'package:researcher/Notifcation/notification.dart';
-import 'package:researcher/PasswordGenerator/password_generator.dart';
-import 'package:researcher/VideoCall/video_call_screen.dart';
-import 'package:researcher/rz/Pagination/UI/list_view.dart';
 
 class OptionsPage extends StatefulWidget {
   const OptionsPage({super.key});
@@ -16,7 +12,7 @@ class OptionsPage extends StatefulWidget {
 class _OptionsPageState extends State<OptionsPage> {
   @override
   void initState() {
-    Notifications().initNotification();
+    // Notifications().initNotification();
     Notifications().registerPushNotifications();
     super.initState();
   }
@@ -36,11 +32,11 @@ class _OptionsPageState extends State<OptionsPage> {
                 width: MediaQuery.of(context).size.width * .9,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const PaginationView(),
-                      ),
-                    );
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const PaginationView(),
+                    //   ),
+                    // );
                   },
                   child: const Text('Pagination'),
                 ),
@@ -53,11 +49,11 @@ class _OptionsPageState extends State<OptionsPage> {
                 width: MediaQuery.of(context).size.width * .9,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const PasswordGenerator(),
-                      ),
-                    );
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const PasswordGenerator(),
+                    //   ),
+                    // );
                   },
                   child: const Text('Password Generator'),
                 ),
@@ -70,11 +66,11 @@ class _OptionsPageState extends State<OptionsPage> {
                 width: MediaQuery.of(context).size.width * .9,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const AnimationMainScreen(),
-                      ),
-                    );
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const AnimationMainScreen(),
+                    //   ),
+                    // );
                   },
                   child: const Text('Animation'),
                 ),
@@ -87,11 +83,11 @@ class _OptionsPageState extends State<OptionsPage> {
                 width: MediaQuery.of(context).size.width * .9,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const VideoCallingScreen(),
-                      ),
-                    );
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const VideoCallingScreen(),
+                    //   ),
+                    // );
                   },
                   child: const Text('VideoCall'),
                 ),

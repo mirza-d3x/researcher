@@ -1,39 +1,21 @@
-import 'dart:developer';
-
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:researcher/Notifcation/notication_test.dart';
 import 'package:researcher/firebase_options.dart';
-import 'package:researcher/options.dart';
-import 'package:researcher/rz/Pagination/Api/api_functions.dart';
-import 'package:researcher/rz/Pagination/Bloc/bloc/pagination_bloc_bloc.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
-
-Future<void> backgroundHandler(RemoteMessage message) async {
-  log('Handling a background message: ${message.messageId}');
-  // Add your custom logic to handle the background message here
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+
   final navigatorKey = GlobalKey<NavigatorState>();
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
-  ApiS apiS = ApiS();
+  // ApiS apiS = ApiS();
 
   runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => PaginationBloc(apiS),
-        ),
-      ],
-      child: MyApp(navigatorKey: navigatorKey),
-    ),
+    MyApp(navigatorKey: navigatorKey),
   );
 }
 
@@ -49,7 +31,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const OptionsPage(),
+      home: const NotificationScreen(),
     );
   }
 }
